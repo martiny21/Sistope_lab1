@@ -80,9 +80,17 @@ int main(int argc, char *argv[]){
         }
 
         BMPImage *new_image = saturation(image, p);
-
         write_bmp("saturated.bmp", new_image);
+
+        BMPImage *new_image_GS = grayScale_bmp(new_image)
+        write_bmp("grayScale.bmp", new_image_GS);
+
+        free_bmp(image);
+        free_bmp(new_image);
+        free_bmp(new_image_GS);
+        
         loop++;
+
     }
     
 
