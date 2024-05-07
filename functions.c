@@ -95,12 +95,10 @@ BMPImage* grayScale_bmp(BMPImage* image) {
     for (int y = 0; y < image->height; y++) {
         for (int x = 0; x < image->width; x++) {
             RGBPixel pixel = image->data[y * image->width + x];
-            //new_image->data[y * image->width + x] = pixel.r * 0.3 + pixel.g * 0.59 + pixel.b * 0.11;
-            //float pixelY = image->dataY[y * image->width + x];
-            //pixelY = image->data->r * 0.3 + image->data->g * 0.59 + image->data->b * 0.11;
-            pixel.r = (unsigned char)(pixel.r * 0.3 + pixel.g * 0.59 + pixel.b * 0.11);
-            pixel.g = (unsigned char)(pixel.r * 0.3 + pixel.g * 0.59 + pixel.b * 0.11);
-            pixel.b = (unsigned char)(pixel.r * 0.3 + pixel.g * 0.59 + pixel.b * 0.11);
+            unsigned char gray = (unsigned char)(pixel.r * 0.3 + pixel.g * 0.59 + pixel.b * 0.11);
+            pixel.r = gray;
+            pixel.g = gray;
+            pixel.b = gray;
             new_image->data[y * image->width + x] = pixel;
         }
     }
@@ -123,6 +121,7 @@ BMPImage* saturate_bmp(BMPImage* image, float factor) {
 
             
             //Para asegurarse de estar dentro del rango
+            
             if (pixel.r > 255){
                 pixel.r = 255;
             }
@@ -133,7 +132,7 @@ BMPImage* saturate_bmp(BMPImage* image, float factor) {
                 pixel.b = 255;
             }
             
-            new_image->data[y * image->width + x] = pixel;
+            new_image->data[y * image->width + x] = pixel; 
         }
     }
 
