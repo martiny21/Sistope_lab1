@@ -2,7 +2,6 @@
 
 
 
-
 BMPImage* read_bmp(const char* filename) {
     FILE* file = fopen(filename, "rb"); //rb = read binary
     if (!file) {
@@ -107,4 +106,73 @@ BMPImage* grayScale_bmp(BMPImage* image) {
     }
 
     return new_image;
+}
+
+BMPImage* saturate_bmp(BMPImage* image, float factor) {
+    BMPImage* new_image = (BMPImage*)malloc(sizeof(BMPImage));
+    new_image->width = image->width;
+    new_image->height = image->height;
+    new_image->data = (RGBPixel*)malloc(sizeof(RGBPixel) * image->width * image->height);
+
+    for (int y = 0; y < image->height; y++) {
+        for (int x = 0; x < image->width; x++) {
+            RGBPixel pixel = image->data[y * image->width + x];
+            pixel.r = (unsigned char)(pixel.r * factor);
+            pixel.g = (unsigned char)(pixel.g * factor);
+            pixel.b = (unsigned char)(pixel.b * factor);
+
+            
+            //Para asegurarse de estar dentro del rango
+            if (pixel.r > 255){
+                pixel.r = 255;
+            }
+            if (pixel.g > 255){ 
+                pixel.g = 255;
+            }
+            if (pixel.b > 255){ 
+                pixel.b = 255;
+            }
+            
+            new_image->data[y * image->width + x] = pixel;
+        }
+    }
+
+    return new_image;
+}
+
+/*
+Entrada:
+Salida:
+Descripcion:
+*/
+BMPImage* binarize_bmp(BMPImage* image,float factor){
+    BMPImage* new_image = (BMPImage*)malloc(sizeof(BMPImage));
+    new_image->width = image->width;
+    new_image->height = image->height;
+    new_image->data = (RGBPixel*)malloc(sizeof(RGBPixel) * image->width * image->height);
+    int umbral = (int)fabs(255 * factor);
+
+    for (int y = 0; y < image->height; y++) {
+        for (int x = 0; x < image->width; x++) {
+            RGBPixel pixel = image->data[y * image->width + x];
+
+            //Verificar si el pixel pasa el umbral
+            if ((pixel.r > umbral && pixel.g > umbral) && pixel.b > umbral) {
+                pixel.r = 255;
+                pixel.g = 255;
+                pixel.b = 255;
+
+            } else{
+                pixel.r = 0;
+                pixel.g = 0;
+                pixel.b = 0;
+
+            }
+
+            new_image->data[y * image->width + x] = pixel;
+        }
+    }
+
+    return new_image;
+
 }

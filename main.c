@@ -63,13 +63,14 @@ int main(int argc, char *argv[]){
     {
         
         char *name;
-        char number[50];
+        /*char number[50];
         name= N;                        
         sprintf(number, "%d",loop);
         strcat(name, number);
         printf("Nombre = %s\n",name);       //Falta ver como agregar el "_"
-        
+        */
         BMPImage *image;
+        name = "rb.bmp";              //Cambiar name para probar imagenes
         image = read_bmp(name);
         
         if(image == NULL){
@@ -79,18 +80,22 @@ int main(int argc, char *argv[]){
             return 0;
         }
 
-        BMPImage *new_image = saturation(image, p);
+        BMPImage *new_image = saturate_bmp(image, p);
         write_bmp("saturated.bmp", new_image);
 
-        BMPImage *new_image_GS = grayScale_bmp(new_image)
+        BMPImage *new_image_GS = grayScale_bmp(new_image);
         write_bmp("grayScale.bmp", new_image_GS);
+
+        BMPImage *new_image_B = binarize_bmp(new_image_GS,u);
+        write_bmp("Binarize.bmp", new_image_B);
 
         free_bmp(image);
         free_bmp(new_image);
         free_bmp(new_image_GS);
+        free_bmp(new_image_B);
         
-        loop++;
-
+        //loop++;
+        loop = 0;       // Para que la prueba no se haga un loop infinito
     }
     
 
