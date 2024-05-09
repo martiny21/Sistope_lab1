@@ -1,9 +1,9 @@
 all: main
 
 main: main.c functions.o
-	gcc functions.o main.c -o main
+	gcc -g functions.o main.c -o main
 
-functions: functions.c
+functions: functions.c functions.h
 	gcc -g -c functions.c
 saturation: s
 

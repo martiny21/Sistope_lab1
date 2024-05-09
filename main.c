@@ -70,7 +70,7 @@ int main(int argc, char *argv[]){
         printf("Nombre = %s\n",name);       //Falta ver como agregar el "_"
         */
         BMPImage *image;
-        name = "rb.bmp";              //Cambiar name para probar imagenes
+        name = "toji(1).bmp";              //Cambiar name para probar imagenes
         image = read_bmp(name);
         
         if(image == NULL){

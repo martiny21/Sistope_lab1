@@ -106,12 +106,32 @@ BMPImage* grayScale_bmp(BMPImage* image) {
     return new_image;
 }
 
+/*
+Entrada:
+Salida:
+Descripcion:
+*/
 BMPImage* saturate_bmp(BMPImage* image, float factor) {
     BMPImage* new_image = (BMPImage*)malloc(sizeof(BMPImage));
+    
+    // Comprobacion de asignacion de memoria
+    if (new_image == NULL){
+        printf("Error asignando memoria para la nueva imagen");
+        return NULL;
+    }
+
     new_image->width = image->width;
     new_image->height = image->height;
     new_image->data = (RGBPixel*)malloc(sizeof(RGBPixel) * image->width * image->height);
 
+    // Comprobacion de asignacion de memoria a pixeles
+    if (new_image->data == NULL){
+        printf("Error asignando memoria para los pixeles de la imagen");
+        free(new_image);
+        return NULL;
+    }
+
+    // Saturacion de imagen multiplicando cada pixel por el factor
     for (int y = 0; y < image->height; y++) {
         for (int x = 0; x < image->width; x++) {
             RGBPixel pixel = image->data[y * image->width + x];
@@ -120,8 +140,7 @@ BMPImage* saturate_bmp(BMPImage* image, float factor) {
             pixel.b = (unsigned char)(pixel.b * factor);
 
             
-            //Para asegurarse de estar dentro del rango
-            
+            //Asegurar que los pixeles esten dentro del rango valido
             if (pixel.r > 255){
                 pixel.r = 255;
             }
@@ -132,7 +151,7 @@ BMPImage* saturate_bmp(BMPImage* image, float factor) {
                 pixel.b = 255;
             }
             
-            new_image->data[y * image->width + x] = pixel; 
+            new_image->data[y * new_image->width + x] = pixel; 
         }
     }
 
