@@ -1,6 +1,8 @@
+#include <stdio.h>
+#include <stdlib.h>
 #include <getopt.h>
 #include <string.h>
-#include <sys/param.h>
+#include <unistd.h>
 #include "functions.h"
 
 
@@ -69,6 +71,12 @@ int main(int argc, char *argv[]){
     
     while (loop!=0)     //Esto me genera ruido porque de no encontrar mas simplemente termina la ejecucion
     {
+
+        char *name1, signo[1] ="_", resultado[25];
+        name1 = N;
+
+        sprintf(resultado, "%s%s", name1, signo); //Concatenar prefijo (N) y símbolo _
+        printf("Despues de concatenar: %s\n", resultado); //resultado = imagen_
         
         char *name;
         /*char number[50];
