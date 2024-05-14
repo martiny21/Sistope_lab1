@@ -1,5 +1,6 @@
 #include <getopt.h>
 #include <string.h>
+#include <sys/param.h>
 #include "functions.h"
 
 
@@ -56,6 +57,13 @@ int main(int argc, char *argv[]){
     if (R == NULL && C == NULL){
         printf("Falto el ingreso de parametros obligatorios, nombre de la carpeta resultante o nombre del archivo CSV\n");
         return 0;
+    }
+
+    char *carpeta = C;
+    if (mkdir(carpeta) == 0) {
+        printf("La carpeta se creó correctamente.\n");
+    } else {
+        printf("Error al crear la carpeta.\n");
     }
     
     
