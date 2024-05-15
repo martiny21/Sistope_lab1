@@ -83,8 +83,13 @@ int main(int argc, char *argv[]){
     fclose(fileCSV);
     
     
-    while (loop!=0)     //Esto me genera ruido porque de no encontrar mas simplemente termina la ejecucion
+    while (loop!=3)     //Esto me genera ruido porque de no encontrar mas simplemente termina la ejecucion
     {
+
+        char saturated[20] = "saturated";
+        char grayScale[20] = "grayScale";
+        char binarize[20] = "binarize";
+        char bmp[20] = ".bmp";
 
         char *name1;
         name1 = N;
@@ -102,6 +107,27 @@ int main(int argc, char *argv[]){
         // Concatenar el número de loop
         snprintf(resultado + strlen(resultado), sizeof(resultado) - strlen(resultado), "%d", loop);
         printf("Después de concatenar: %s\n", resultado);
+
+        // Concatenar variable saturated con loop y bmp
+        snprintf(saturated + strlen(saturated), sizeof(saturated) - strlen(saturated), "%d", loop);
+        printf("Después de concatenar: %s\n", saturated);
+
+        snprintf(saturated, sizeof(saturated), "%s%s", saturated, bmp);
+        printf("Después de concatenar: %s\n", saturated);
+
+        // Concatenar variable grayScale con loop y bmp
+        snprintf(grayScale + strlen(grayScale), sizeof(grayScale) - strlen(grayScale), "%d", loop);
+        printf("Después de concatenar: %s\n", grayScale);
+
+        snprintf(grayScale, sizeof(grayScale), "%s%s", grayScale, bmp);
+        printf("Después de concatenar: %s\n", grayScale);
+
+        // Concatenar variable binarize con loop y bmp
+        snprintf(binarize + strlen(binarize), sizeof(binarize) - strlen(binarize), "%d", loop);
+        printf("Después de concatenar: %s\n", binarize);
+
+        snprintf(binarize, sizeof(binarize), "%s%s", binarize, bmp);
+        printf("Después de concatenar: %s\n", binarize);
         
         char *name = resultado;
         /*char number[50];
@@ -111,7 +137,7 @@ int main(int argc, char *argv[]){
         printf("Nombre = %s\n",name);       //Falta ver como agregar el "_"
         
         BMPImage *image;
-        name = "toji(1).bmp";              //Cambiar name para probar imagenes
+        name = "rb.bmp";              //Cambiar name para probar imagenes
         image = read_bmp(name);
         
         if(image == NULL){
@@ -122,21 +148,21 @@ int main(int argc, char *argv[]){
         }
 
         BMPImage *new_image = saturate_bmp(image, p);
-        write_bmp("saturated.bmp", new_image);
+        write_bmp(saturated, new_image);
 
         BMPImage *new_image_GS = grayScale_bmp(new_image);
-        write_bmp("grayScale.bmp", new_image_GS);
+        write_bmp(grayScale, new_image_GS);
 
         BMPImage *new_image_B = binarize_bmp(new_image_GS,u);
-        write_bmp("Binarize.bmp", new_image_B);
+        write_bmp(binarize, new_image_B);
 
         free_bmp(image);
         free_bmp(new_image);
         free_bmp(new_image_GS);
         free_bmp(new_image_B);
         
-        //loop++;
-        loop = 0;       // Para que la prueba no se haga un loop infinito
+        loop++;
+        //loop = 0;       // Para que la prueba no se haga un loop infinito
 
 
 

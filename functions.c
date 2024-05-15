@@ -181,8 +181,6 @@ BMPImage* grayScale_bmp(BMPImage* image) {
     return new_image;
 }
 
-
-
 /*
 Entrada: imagen tipo BMPImage (imagen en escala de grises) y un umbral (factor) de binarizacion
 Salida: imagen binarizada tipo BMPImage
