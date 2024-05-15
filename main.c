@@ -80,25 +80,36 @@ int main(int argc, char *argv[]){
 
     //Archivo CSV con 2 columnas
     fprintf(fileCSV, "Nombre Imagen,Clasificacion\n");
-    fclose(archivo); // Cierra el archivo
+    fclose(fileCSV);
     
     
     while (loop!=0)     //Esto me genera ruido porque de no encontrar mas simplemente termina la ejecucion
     {
 
-        char *name1, signo[1] ="_", resultado[25];
+        char *name1;
         name1 = N;
 
-        sprintf(resultado, "%s%s", name1, signo); //Concatenar prefijo (N) y símbolo _
-        printf("Despues de concatenar: %s\n", resultado); //resultado = imagen_
+        char signo[] = "_"; // Se declara signo como una cadena de caracteres, terminada con '\0'
+        char resultado[25]; // Se mantiene la declaración de resultado
+
+        // Inicializar resultado como una cadena vacía
+        resultado[0] = '\0';
+
+        // Concatenar prefijo (N) y símbolo _
+        snprintf(resultado, sizeof(resultado), "%s%s", name1, signo);
+        printf("Después de concatenar: %s\n", resultado);
+
+        // Concatenar el número de loop
+        snprintf(resultado + strlen(resultado), sizeof(resultado) - strlen(resultado), "%d", loop);
+        printf("Después de concatenar: %s\n", resultado);
         
-        char *name;
+        char *name = resultado;
         /*char number[50];
         name= N;                        
         sprintf(number, "%d",loop);
-        strcat(name, number);
+        strcat(name, number);*/
         printf("Nombre = %s\n",name);       //Falta ver como agregar el "_"
-        */
+        
         BMPImage *image;
         name = "toji(1).bmp";              //Cambiar name para probar imagenes
         image = read_bmp(name);
@@ -130,9 +141,14 @@ int main(int argc, char *argv[]){
 
 
         /*Despues de clasificacion
+        fileCSV = fopen(R, "w");
+
         if nearly_black == 1
-            fileCSV = fopen(R, "w");
-            fprintf(fileCSV, "Nombre Imagen,Clasificacion (0 o 1)\n");
+            fprintf(fileCSV, "Nombre Imagen, 1\n");
+        else
+            fprintf(fileCSV, "Nombre Imagen, 0\n");
+
+        fclose(fileCSV);
         */
     }
     

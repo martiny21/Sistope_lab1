@@ -185,8 +185,10 @@ BMPImage* grayScale_bmp(BMPImage* image) {
 
 /*
 Entrada: imagen tipo BMPImage (imagen en escala de grises) y un umbral (factor) de binarizacion
-Salida: imagen en escala de grises tipo BMPImage
-Descripcion:
+Salida: imagen binarizada tipo BMPImage
+Descripcion: se binariza una imagen usando un umbral (o factor) como referencia, si el pixel tiene
+un valor  mayor a este, se asigna 255, es decir, un pixel blanco, por el contrario, se asigna 0, indicando
+un pixel negro
 */
 BMPImage* binarize_bmp(BMPImage* image,float factor){
     BMPImage* new_image = (BMPImage*)malloc(sizeof(BMPImage));
