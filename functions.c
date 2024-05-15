@@ -219,3 +219,29 @@ BMPImage* binarize_bmp(BMPImage* image,float factor){
     return new_image;
 
 }
+
+int nearly_black(BMPImage* image,float factor){
+    int cont1 = 0, cont2 = 0;
+    int umbral = (int)fabs(255 * factor);
+
+    for (int y = 0; y < image->height; y++) {
+        for (int x = 0; x < image->width; x++) {
+            RGBPixel pixel = image->data[y * image->width + x];
+
+            //Verificar si el pixel pasa el umbral
+            if ((pixel.r > umbral && pixel.g > umbral) && pixel.b > umbral) {
+                cont1++;
+
+            } else{
+                cont2++;
+            }
+        }
+    }
+
+    if (cont1 < cont2) {
+        return 1; //Imagen es nearly black
+    }
+
+    return 0; //Imagen no es nearly black
+
+}

@@ -18,3 +18,5 @@ BMPImage* grayScale_bmp(BMPImage* image);               //Escala de grises
 BMPImage* saturate_bmp(BMPImage* image, float factor);  //Saturacion
 
 BMPImage* binarize_bmp(BMPImage* image,float factor);    //Binarizacion
+
+int nearly_black(BMPImage* image,float factor);

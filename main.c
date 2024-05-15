@@ -80,10 +80,10 @@ int main(int argc, char *argv[]){
 
     //Archivo CSV con 2 columnas
     fprintf(fileCSV, "Nombre Imagen,Clasificacion\n");
-    fclose(fileCSV);
+    //fclose(fileCSV);  //--------------El archivo se cierra al terminar el programa
     
     
-    while (loop!=3)     //Esto me genera ruido porque de no encontrar mas simplemente termina la ejecucion
+    while (loop!=0)     //Esto me genera ruido porque de no encontrar mas simplemente termina la ejecucion
     {
 
         char saturated[20] = "saturated";
@@ -104,7 +104,7 @@ int main(int argc, char *argv[]){
         snprintf(resultado, sizeof(resultado), "%s%s", name1, signo);
         printf("Después de concatenar: %s\n", resultado);
 
-        // Concatenar el número de loop
+        // Concatenar el número de loop con resultado
         snprintf(resultado + strlen(resultado), sizeof(resultado) - strlen(resultado), "%d", loop);
         printf("Después de concatenar: %s\n", resultado);
 
@@ -156,13 +156,21 @@ int main(int argc, char *argv[]){
         BMPImage *new_image_B = binarize_bmp(new_image_GS,u);
         write_bmp(binarize, new_image_B);
 
+        //fileCSV = fopen(R, "w");
+        if (nearly_black(new_image_B, v) == 1) {
+            fprintf(fileCSV, "%s, 1\n", resultado);
+        }
+        else {
+            fprintf(fileCSV, "%s, 0\n", resultado);
+        }
+        
         free_bmp(image);
         free_bmp(new_image);
         free_bmp(new_image_GS);
         free_bmp(new_image_B);
         
-        loop++;
-        //loop = 0;       // Para que la prueba no se haga un loop infinito
+        //loop++;
+        loop = 0;       // Para que la prueba no se haga un loop infinito
 
 
 
@@ -177,7 +185,8 @@ int main(int argc, char *argv[]){
         fclose(fileCSV);
         */
     }
-    
+
+    fclose(fileCSV);
 
     return 0;
 }
