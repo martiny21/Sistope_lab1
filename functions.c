@@ -1,7 +1,12 @@
 #include "functions.h"
 
 
-
+/*
+Entrada: Nombre del archivo a leer (archivo bpm)
+Salida: imagen tipo BMPImage
+Descripcion: Se lee un archivo tipo bmp, se define el ancho, el alto y los pixeles de la imagen
+y se gurdan estos datos en las respectivas variables para luego retornar la variable image de tipo BMPImage
+*/
 BMPImage* read_bmp(const char* filename) {
     FILE* file = fopen(filename, "rb"); //rb = read binary
     if (!file) {
@@ -42,6 +47,11 @@ BMPImage* read_bmp(const char* filename) {
     return image;
 }
 
+/*
+Entrada: imagen tipo BMPImage
+Salida: void
+Descripcion: Se libera memoria de una imagen
+*/
 void free_bmp(BMPImage* image) {
     if (image) {
         free(image->data);
@@ -49,6 +59,11 @@ void free_bmp(BMPImage* image) {
     }
 }
 
+/*
+Entrada:
+Salida:
+Descripcion:
+*/
 void write_bmp(const char* filename, BMPImage* image) {
     FILE* file = fopen(filename, "wb"); //wb = write binary
     if (!file) {
@@ -86,30 +101,12 @@ void write_bmp(const char* filename, BMPImage* image) {
     fclose(file);
 }
 
-BMPImage* grayScale_bmp(BMPImage* image) {
-    BMPImage* new_image = (BMPImage*)malloc(sizeof(BMPImage));
-    new_image->width = image->width;
-    new_image->height = image->height;
-    new_image->data = (RGBPixel*)malloc(sizeof(RGBPixel) * image->width * image->height);
-
-    for (int y = 0; y < image->height; y++) {
-        for (int x = 0; x < image->width; x++) {
-            RGBPixel pixel = image->data[y * image->width + x];
-            unsigned char gray = (unsigned char)(pixel.r * 0.3 + pixel.g * 0.59 + pixel.b * 0.11);
-            pixel.r = gray;
-            pixel.g = gray;
-            pixel.b = gray;
-            new_image->data[y * image->width + x] = pixel;
-        }
-    }
-
-    return new_image;
-}
-
 /*
-Entrada:
-Salida:
-Descripcion:
+Entrada: imagen tipo BMPImage, factor de saturación tipo float
+Salida: imagen saturada tipo BMPImage
+Descripcion: Se satura una imagen usando un facto de saturación, este factor se
+multiplica a cada componente de cada pixel de la imagen (pixel.r, pixel.g y pixel.b)
+para de esta manera retornar la imagen saturada
 */
 BMPImage* saturate_bmp(BMPImage* image, float factor) {
     BMPImage* new_image = (BMPImage*)malloc(sizeof(BMPImage));
@@ -157,10 +154,38 @@ BMPImage* saturate_bmp(BMPImage* image, float factor) {
 
     return new_image;
 }
+/*
+Entrada: imagen tipo BMPImage (Imagen anteiormente saturada)
+Salida: imagen en escala de grises tipo BMPImage
+Descripcion: Se realiza la escala de grises de una imagen usando una ecuacion de luminiscencia:
+Y = pixel.r * 0.3 + pixel.g * 0.59 + pixel.b * 0.11, el resultado de esto se almacena en la variable
+gray y luego se asigna a cada componente de pixel (pixel.r, pixel.g y pixel.b)
+*/
+BMPImage* grayScale_bmp(BMPImage* image) {
+    BMPImage* new_image = (BMPImage*)malloc(sizeof(BMPImage));
+    new_image->width = image->width;
+    new_image->height = image->height;
+    new_image->data = (RGBPixel*)malloc(sizeof(RGBPixel) * image->width * image->height);
+
+    for (int y = 0; y < image->height; y++) {
+        for (int x = 0; x < image->width; x++) {
+            RGBPixel pixel = image->data[y * image->width + x];
+            unsigned char gray = (unsigned char)(pixel.r * 0.3 + pixel.g * 0.59 + pixel.b * 0.11);
+            pixel.r = gray;
+            pixel.g = gray;
+            pixel.b = gray;
+            new_image->data[y * image->width + x] = pixel;
+        }
+    }
+
+    return new_image;
+}
+
+
 
 /*
-Entrada:
-Salida:
+Entrada: imagen tipo BMPImage (imagen en escala de grises) y un umbral (factor) de binarizacion
+Salida: imagen en escala de grises tipo BMPImage
 Descripcion:
 */
 BMPImage* binarize_bmp(BMPImage* image,float factor){

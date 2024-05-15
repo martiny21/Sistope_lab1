@@ -61,12 +61,26 @@ int main(int argc, char *argv[]){
         return 0;
     }
 
+    //Creacion de carpeta
     char *carpeta = C;
     if (mkdir(carpeta) == 0) {
         printf("La carpeta se creó correctamente.\n");
     } else {
         printf("Error al crear la carpeta.\n");
     }
+
+    //Creacion archivo CSV
+    FILE *fileCSV;
+    fileCSV = fopen(R, "w"); // Abre el archivo en modo escritura ("w")
+
+    if (fileCSV == NULL) {
+        printf("Error al abrir el archivo.");
+        return 0;
+    }
+
+    //Archivo CSV con 2 columnas
+    fprintf(fileCSV, "Nombre Imagen,Clasificacion\n");
+    fclose(archivo); // Cierra el archivo
     
     
     while (loop!=0)     //Esto me genera ruido porque de no encontrar mas simplemente termina la ejecucion
@@ -112,6 +126,14 @@ int main(int argc, char *argv[]){
         
         //loop++;
         loop = 0;       // Para que la prueba no se haga un loop infinito
+
+
+
+        /*Despues de clasificacion
+        if nearly_black == 1
+            fileCSV = fopen(R, "w");
+            fprintf(fileCSV, "Nombre Imagen,Clasificacion (0 o 1)\n");
+        */
     }
     
 
