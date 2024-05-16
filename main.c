@@ -10,9 +10,8 @@
 int main(int argc, char *argv[]){
     int f = 3, i = 1;
     float u = 0.5, p = 1.3, v = 0.5;
-    char *C = NULL , *R = NULL, *N = NULL;
-    //Los prametros -C y -R son obligatorios
-
+    char *C = NULL , *R = NULL, *N = NULL; //Los prametros -C y -R son obligatorios
+    
     int loop = 1;   //Verdadero, es una bandera para continuar un ciclo
     int option;
 
@@ -30,10 +29,10 @@ int main(int argc, char *argv[]){
             p = atof(optarg); //-p: factor de saturación del filtro.
             break;
         case 'u':
-            u = atoi(optarg); //-u: UMBRAL para binarizar la imagen.
+            u = atof(optarg); //-u: UMBRAL para binarizar la imagen.
             break;
         case 'v':
-            v = atoi(optarg); //-v: UMBRAL para clasificación.
+            v = atof(optarg); //-v: UMBRAL para clasificación.
             break;
         case 'C':
             C = optarg; //-C: nombre de la carpeta resultante con las imágenes, con los filtros aplicados.

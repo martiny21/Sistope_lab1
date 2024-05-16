@@ -10,9 +10,8 @@
 int main(int argc, char *argv[]){
     int f = 3, i = 1;
     float u = 0.5, p = 1.3, v = 0.5;
-    char *C = NULL , *R = NULL, *N = NULL;
-    //Los prametros -C y -R son obligatorios
-
+    char *C = NULL , *R = NULL, *N = NULL; //Los prametros -C y -R son obligatorios
+    
     int loop = 1;   //Verdadero, es una bandera para continuar un ciclo
     int option;
 
