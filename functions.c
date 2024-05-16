@@ -132,20 +132,20 @@ BMPImage* saturate_bmp(BMPImage* image, float factor) {
     for (int y = 0; y < image->height; y++) {
         for (int x = 0; x < image->width; x++) {
             RGBPixel pixel = image->data[y * image->width + x];
-            pixel.r = (unsigned char)(pixel.r * factor);
-            pixel.g = (unsigned char)(pixel.g * factor);
-            pixel.b = (unsigned char)(pixel.b * factor);
+            pixel.r = pixel.r * factor;
+            pixel.g = pixel.g * factor;
+            pixel.b = pixel.b * factor;
 
             
             //Asegurar que los pixeles esten dentro del rango valido
             if (pixel.r > 255){
-                pixel.r = 255;
+                pixel.r = (unsigned char) 255;
             }
             if (pixel.g > 255){ 
-                pixel.g = 255;
+                pixel.g = (unsigned char) 255;
             }
             if (pixel.b > 255){ 
-                pixel.b = 255;
+                pixel.b = (unsigned char) 255;
             }
             
             new_image->data[y * new_image->width + x] = pixel; 

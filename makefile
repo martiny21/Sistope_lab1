@@ -12,4 +12,4 @@ binary:
 gray:
 
 clean:
-	rm -f *.o main
+	rm -f *.o main clasificaciones
