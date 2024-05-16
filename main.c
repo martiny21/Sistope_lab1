@@ -83,9 +83,7 @@ int main(int argc, char *argv[]){
     fprintf(fileCSV, "Nombre Imagen,Clasificacion\n");
     //fclose(fileCSV);  //--------------El archivo se cierra al terminar el programa
 
-    char saturated[100] = "saturated";
-    char grayScale[100] = "grayScale";
-    char binarize[100] = "binarize";
+    
     char bmp[20] = ".bmp";
     char *name1;
     name1 = N;
@@ -112,8 +110,13 @@ int main(int argc, char *argv[]){
     // Inicializar resultado como una cadena vacía
         resultado[0] = '\0';
     
-    while (loop!=0 && loop < 4)     //Esto me genera ruido porque de no encontrar mas simplemente termina la ejecucion
-    {         
+    while (loop!=0)     //Esto me genera ruido porque de no encontrar mas simplemente termina la ejecucion
+    {       
+
+        char saturated[100] = "saturated";
+        char grayScale[100] = "grayScale";
+        char binarize[100] = "binarize";  
+
         snprintf(PathSatured, sizeof(PathSatured), "%s%c", C, slash);
         printf("Después de concatenar: %s\n", PathSatured);
 
@@ -172,9 +175,10 @@ int main(int argc, char *argv[]){
         image = read_bmp(name);
         
         if(image == NULL){
-            printf("No se pudo encontrar otra imagen o hubo un error en el proceso");   
+            printf("No se pudo encontrar otra imagen o hubo un error en el proceso\n");   
             //Se podria modificar el read para que devuelva cosas distintas en funcion si no pudo abrir la imagen o
             //hubo un error con el formato de la imagen
+            fclose(fileCSV);
             return 0;
         }
 
@@ -241,9 +245,6 @@ int main(int argc, char *argv[]){
         free_bmp(new_image_B);
         
         loop++;
-        //loop = 0;       // Para que la prueba no se haga un loop infinito
-
-
 
         /*Despues de clasificacion
         fileCSV = fopen(R, "w");
