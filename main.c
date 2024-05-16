@@ -110,70 +110,26 @@ int main(int argc, char *argv[]){
     // Inicializar resultado como una cadena vacía
         resultado[0] = '\0';
     
-    while (loop!=0)     //Esto me genera ruido porque de no encontrar mas simplemente termina la ejecucion
-    {       
-
+    while (loop!=0) 
+    {   
         char saturated[100] = "saturated";
         char grayScale[100] = "grayScale";
-        char binarize[100] = "binarize";  
-
-        snprintf(PathSatured, sizeof(PathSatured), "%s%c", C, slash);
-        printf("Después de concatenar: %s\n", PathSatured);
-
-        snprintf(PathGray, sizeof(PathGray), "%s%c", C, slash);
-        printf("Después de concatenar: %s\n", PathGray);
-
-        snprintf(PathBinary, sizeof(PathBinary), "%s%c", C, slash);
-        printf("Después de concatenar: %s\n", PathBinary);
-
-
-        // *comentario de desarrollo* esta parte hay que separarla en caso de que se deseen usar menos filtros
+        char binarize[100] = "binarize";
+        
         // Concatenar prefijo (N) y símbolo _
         snprintf(resultado, sizeof(resultado), "%s%c", name1, signo);
-        printf("Después de concatenar: %s\n", resultado);
 
-        // *comentario de desarrollo* esta parte hay que separarla en caso de que se deseen usar menos filtros
         // Concatenar el número de loop con resultado
-        snprintf(resultado + strlen(resultado), sizeof(resultado) - strlen(resultado), "%d", loop); 
+        snprintf(resultado + strlen(resultado), sizeof(resultado) - strlen(resultado), "%d", loop);
 
-        // *comentario de desarrollo* esta parte hay que separarla en caso de que se deseen usar menos filtros
         // Concatenar la extension del archivo
         snprintf(resultado + strlen(resultado), sizeof(resultado) - strlen(resultado), "%s", bmp);
-        printf("Después de concatenar: %s\n", resultado);
+        printf("Después de concatenar: %s\n", resultado);                   //Eliminar linea para la entrega
 
-        // *comentario de desarrollo* esta parte hay que separarla en caso de que se deseen usar menos filtros
-        // Concatenar variable saturated con loop y bmp
-        snprintf(saturated + strlen(saturated), sizeof(saturated) - strlen(saturated), "%d", loop);
-
-        snprintf(saturated + strlen(saturated), sizeof(saturated)- strlen(saturated), "%s", bmp);
-        printf("Después de concatenar: %s\n", saturated);
-
-        // *comentario de desarrollo* esta parte hay que separarla en caso de que se deseen usar menos filtros
-        // Concatenar variable grayScale con loop y bmp
-        snprintf(grayScale + strlen(grayScale), sizeof(grayScale) - strlen(grayScale), "%d", loop);
-        
-        snprintf(grayScale + strlen(grayScale), sizeof(grayScale)- strlen(saturated), "%s", bmp);
-        printf("Después de concatenar: %s\n", grayScale);
-
-        // *comentario de desarrollo* esta parte hay que separarla en caso de que se deseen usar menos filtros
-        // Concatenar variable binarize con loop y bmp
-        snprintf(binarize + strlen(binarize), sizeof(binarize) - strlen(binarize), "%d", loop);
-
-        // *comentario de desarrollo* esta parte hay que separarla en caso de que se deseen usar menos filtros
-        snprintf(binarize + strlen(binarize), sizeof(binarize) - strlen(binarize),"%s", bmp);
-        printf("Después de concatenar: %s\n", binarize);
-        
-        char *name = resultado;
-        /*char number[50];
-        name= N;                        
-        sprintf(number, "%d",loop);
-        strcat(name, number);*/
-        printf("Nombre = %s\n",name);       //Falta ver como agregar el "_"
-        
+        // Lectura de archivo
         BMPImage *image;
-        //name = "rb.bmp";              //Cambiar name para probar imagenes
-        image = read_bmp(name);
-        
+        image = read_bmp(resultado);
+
         if(image == NULL){
             printf("No se pudo encontrar otra imagen o hubo un error en el proceso\n");   
             //Se podria modificar el read para que devuelva cosas distintas en funcion si no pudo abrir la imagen o
@@ -182,67 +138,215 @@ int main(int argc, char *argv[]){
             return 0;
         }
 
-        // *comentario de desarrollo* esta parte hay que separarla en caso de que se deseen usar menos filtros
-        BMPImage *new_image = saturate_bmp(image, p);
-        write_bmp(saturated, new_image);
+        switch (f)
+        {
+        case 1:
+            // *Comentario de desarrollo* Esta seccion se podria hacer en una funcion aparte
+            /*
+            char saturated[100] = "saturated";
+            */
+            snprintf(PathSatured, sizeof(PathSatured), "%s%c", C, slash);
 
-        snprintf(PathSatured + strlen(PathSatured), sizeof(PathSatured) - strlen(PathSatured),"%s", saturated);
-        printf("Después de concatenar: %s\n", PathSatured);
+            // Concatenar variable saturated con loop y bmp
+
+            snprintf(saturated + strlen(saturated), sizeof(saturated) - strlen(saturated), "%d", loop);
+
+            snprintf(saturated + strlen(saturated), sizeof(saturated)- strlen(saturated), "%s", bmp);
+            printf("Después de concatenar: %s\n", saturated);
+
+            // *Comentario de desarrollo* fin de la seccion para la funcion
+
+            // *Comentario de desarrollo* Esta seccion se podria hacer en una funcion aparte
+            // Saturacion de la imagen
+            BMPImage *new_image = saturate_bmp(image, p);
+            write_bmp(saturated, new_image);
+
+            snprintf(PathSatured + strlen(PathSatured), sizeof(PathSatured) - strlen(PathSatured),"%s", saturated);
+            printf("Después de concatenar: %s\n", PathSatured);
+            
+            // Se mueve el archivo al directorio creado
+            if (rename(saturated, PathSatured) == 0) {
+                printf("El archivo saturated se movió correctamente a %s.\n", PathSatured);
+            } else {
+                perror("Error al mover el archivo");
+                return 1;
+            }
+            // *Comentario de desarrollo* fin de la seccion para la funcion
+
+            if (nearly_black(new_image, v) == 1) {
+                fprintf(fileCSV, "%s, 1\n", resultado);
+            }
+            else {
+                fprintf(fileCSV, "%s, 0\n", resultado);
+            }
+
+            free_bmp(new_image);
+
+            break;
+
+        case 2:
+            /*
+            char saturated[100] = "saturated";
+            char grayScale[100] = "grayScale";
+            */
+            // Concatenar variable saturated con loop y bmp
+            snprintf(saturated + strlen(saturated), sizeof(saturated) - strlen(saturated), "%d", loop);
+
+            snprintf(saturated + strlen(saturated), sizeof(saturated)- strlen(saturated), "%s", bmp);
+            printf("Después de concatenar: %s\n", saturated);
+
+            snprintf(PathSatured, sizeof(PathSatured), "%s%c", C, slash);
+            snprintf(PathGray, sizeof(PathGray), "%s%c", C, slash);
+
+            // Concatenar variable grayScale con loop y bmp
+            snprintf(grayScale + strlen(grayScale), sizeof(grayScale) - strlen(grayScale), "%d", loop);
         
-        // Esta parte es para mover la saturacion al directorio creado
-        // *comentario de desarrollo* esta parte hay que separarla en caso de que se deseen usar menos filtros
-        if (rename(saturated, PathSatured) == 0) {
-        printf("El archivo saturated se movió correctamente a %s.\n", PathSatured);
-        } else {
-        perror("Error al mover el archivo");
-        return 1;
-        }
+            snprintf(grayScale + strlen(grayScale), sizeof(grayScale)- strlen(saturated), "%s", bmp);
+            printf("Después de concatenar: %s\n", grayScale);
 
+            // *Comentario de desarrollo* aqui tengo mis dudas de si hay que dejar el archivo de la imagen saturada
 
-        // *comentario de desarrollo* esta parte hay que separarla en caso de que se deseen usar menos filtros
-        BMPImage *new_image_GS = grayScale_bmp(new_image);
-        write_bmp(grayScale, new_image_GS);
+            snprintf(PathSatured + strlen(PathSatured), sizeof(PathSatured) - strlen(PathSatured),"%s", saturated);
+            printf("Después de concatenar: %s\n", PathSatured);
+
+            BMPImage *new_image2 = saturate_bmp(image, p);
+            write_bmp(saturated, new_image2);
+
+            // Se mueve el archivo al directorio creado
+            if (rename(saturated, PathSatured) == 0) {
+                printf("El archivo saturated se movió correctamente a %s.\n", PathSatured);
+            } else {
+                perror("Error al mover el archivo");
+                return 1;
+            }
+
+            // *Comentario de desarrollo* Esta seccion se podria hacer en una funcion aparte
+            BMPImage *new_image_GS = grayScale_bmp(new_image2);
+            write_bmp(grayScale, new_image_GS);
+
+            snprintf(PathGray + strlen(PathGray), sizeof(PathGray) - strlen(PathGray),"%s", grayScale);
+            printf("Después de concatenar: %s\n", PathGray);
+
+            // Esta parte es para mover la escala de grises al directorio creado
+            // *comentario de desarrollo* esta parte hay que separarla en caso de que se deseen usar menos filtros
+            if (rename(grayScale, PathGray) == 0) {
+                printf("El archivo saturated se movió correctamente a %s.\n", PathGray);
+            } else {
+                perror("Error al mover el archivo");
+                return 1;
+            }
+            // *Comentario de desarrollo* fin de la seccion para la funcion
+
+            if (nearly_black(new_image_GS, v) == 1) {
+                fprintf(fileCSV, "%s, 1\n", resultado);
+            }
+            else {
+                fprintf(fileCSV, "%s, 0\n", resultado);
+            }
+
+            free_bmp(new_image2);
+            free_bmp(new_image_GS);
+
+            break;
+
+        case 3:
+            // *Comentario de desarrollo* Esta seccion se podria hacer en una funcion aparte
+            /*
+            char saturated[100] = "saturated";
+            char grayScale[100] = "grayScale";
+            char binarize[100] = "binarize";
+            */
+            snprintf(PathSatured, sizeof(PathSatured), "%s%c", C, slash);
+            snprintf(PathGray, sizeof(PathGray), "%s%c", C, slash);
+            snprintf(PathBinary, sizeof(PathBinary), "%s%c", C, slash);
+
+            snprintf(saturated + strlen(saturated), sizeof(saturated) - strlen(saturated), "%d", loop);
+
+            snprintf(saturated + strlen(saturated), sizeof(saturated)- strlen(saturated), "%s", bmp);
+            printf("Después de concatenar: %s\n", saturated);
+
+            snprintf(PathSatured + strlen(PathSatured), sizeof(PathSatured) - strlen(PathSatured),"%s", saturated);
+            printf("Después de concatenar: %s\n", PathSatured);
+
+            // Concatenar variable binarize con loop y bmp
+            snprintf(binarize + strlen(binarize), sizeof(binarize) - strlen(binarize), "%d", loop);
+
+         
+            snprintf(binarize + strlen(binarize), sizeof(binarize) - strlen(binarize),"%s", bmp);
+            printf("Después de concatenar: %s\n", binarize);
+
+            // Concatenar variable grayScale con loop y bmp
+            snprintf(grayScale + strlen(grayScale), sizeof(grayScale) - strlen(grayScale), "%d", loop);
         
-        // *comentario de desarrollo* esta parte hay que separarla en caso de que se deseen usar menos filtros
-        BMPImage *new_image_B = binarize_bmp(new_image_GS,u);
-        write_bmp(binarize, new_image_B);
+            snprintf(grayScale + strlen(grayScale), sizeof(grayScale)- strlen(saturated), "%s", bmp);
+            printf("Después de concatenar: %s\n", grayScale);
 
-        //fileCSV = fopen(R, "w");
-        if (nearly_black(new_image_B, v) == 1) {
-            fprintf(fileCSV, "%s, 1\n", resultado);
-        }
-        else {
-            fprintf(fileCSV, "%s, 0\n", resultado);
-        }
+            // *Comentario de desarrollo* fin de la seccion para la funcion
 
-        snprintf(PathGray + strlen(PathGray), sizeof(PathGray) - strlen(PathGray),"%s", grayScale);
-        printf("Después de concatenar: %s\n", PathGray);
+            // *Comentario de desarrollo* aqui tengo mis dudas de si hay que dejar el archivo de la imagen saturada
 
-        // Esta parte es para mover la escala de grises al directorio creado
-        // *comentario de desarrollo* esta parte hay que separarla en caso de que se deseen usar menos filtros
-        if (rename(grayScale, PathGray) == 0) {
-        printf("El archivo saturated se movió correctamente a %s.\n", PathGray);
-        } else {
-        perror("Error al mover el archivo");
-        return 1;
-        }
+            BMPImage *new_image3 = saturate_bmp(image, p);
+            write_bmp(saturated, new_image3);
+
+            // Se mueve el archivo al directorio creado
+            if (rename(saturated, PathSatured) == 0) {
+                printf("El archivo saturated se movió correctamente a %s.\n", PathSatured);
+            } else {
+                perror("Error al mover el archivo");
+                return 1;
+            }
+
+            // *Comentario de desarrollo* Esta seccion se podria hacer en una funcion aparte
+            BMPImage *new_image_GS3 = grayScale_bmp(new_image3);
+            write_bmp(grayScale, new_image_GS3);
+            
+            snprintf(PathGray + strlen(PathGray), sizeof(PathGray) - strlen(PathGray),"%s", grayScale);
+            printf("Después de concatenar: %s\n", PathGray);
+
+            // Esta parte es para mover la escala de grises al directorio creado
+            // *comentario de desarrollo* esta parte hay que separarla en caso de que se deseen usar menos filtros
+            if (rename(grayScale, PathGray) == 0) {
+                printf("El archivo saturated se movió correctamente a %s.\n", PathGray);
+            } else {
+                perror("Error al mover el archivo");
+                return 1;
+            }
+            // *Comentario de desarrollo* fin de la seccion para la funcion
+
+            // *Comentario de desarrollo* Esta seccion se podria hacer en una funcion aparte
+            BMPImage *new_image_B = binarize_bmp(new_image_GS3,u);
+            write_bmp(binarize, new_image_B);
+
+            snprintf(PathBinary + strlen(PathBinary), sizeof(PathBinary) - strlen(PathBinary),"%s", binarize);
+            printf("Después de concatenar: %s\n", PathBinary);
+
+            // Esta parte es para mover la binarizacion al directorio creado
+            if (rename(binarize, PathBinary) == 0) {
+                printf("El archivo saturated se movió correctamente a %s.\n", PathBinary);
+            } else {
+                perror("Error al mover el archivo");
+                return 1;
+            }
+
+            //fileCSV = fopen(R, "w");
+            if (nearly_black(new_image_B, v) == 1) {
+                fprintf(fileCSV, "%s, 1\n", resultado);
+            }
+            else {
+                fprintf(fileCSV, "%s, 0\n", resultado);
+            }
         
-        snprintf(PathBinary + strlen(PathBinary), sizeof(PathBinary) - strlen(PathBinary),"%s", binarize);
-        printf("Después de concatenar: %s\n", PathBinary);
-        // Esta parte es para mover la binarizacion al directorio creado
-        // *comentario de desarrollo* esta parte hay que separarla en caso de que se deseen usar menos filtros
-        if (rename(binarize, PathBinary) == 0) {
-        printf("El archivo saturated se movió correctamente a %s.\n", PathBinary);
-        } else {
-        perror("Error al mover el archivo");
-        return 1;
-        }
+            free_bmp(new_image3);
+            free_bmp(new_image_GS3);
+            free_bmp(new_image_B);
+            break;
         
+        default:
+            break;
+        }
         
         free_bmp(image);
-        free_bmp(new_image);
-        free_bmp(new_image_GS);
-        free_bmp(new_image_B);
+        
         
         loop++;
 
