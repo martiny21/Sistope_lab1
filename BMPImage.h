@@ -6,5 +6,3 @@ typedef struct {
     RGBPixel *data; // Puntero a los píxeles de la imagen
 } BMPImage;
 
-void free_bmp(BMPImage* image);
-

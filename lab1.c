@@ -42,6 +42,11 @@ int main(int argc, char *argv[]){
             break;
         }
     }
+    //Verificar que f sea un valor valido
+    if((f > 3) || f < 0){
+        printf("Por favor ingrese un valor entero para f entre 1 y 3\n");
+        return 0;
+    }
 
     //Verificar que se entregan los argumentos olbigatorios
     if (R == NULL && C == NULL){
@@ -124,9 +129,6 @@ int main(int argc, char *argv[]){
 
         switch (f)
         {
-        case 0:
-            printf("No se han aplicado filtros a las imagenes, programa finalizado");
-
         case 1:
             // *Comentario de desarrollo* Esta seccion se podria hacer en una funcion aparte
             /*
