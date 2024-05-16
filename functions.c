@@ -1,6 +1,5 @@
 #include "functions.h"
 
-
 /*
 Entrada: Nombre del archivo a leer (archivo bpm)
 Salida: imagen tipo BMPImage
@@ -60,9 +59,10 @@ void free_bmp(BMPImage* image) {
 }
 
 /*
-Entrada:
-Salida:
-Descripcion:
+Entrada: Nombre de archivo, imagen tipo BMPImage
+Salida: Imagen creada en carpeta
+Descripcion: Se utiliza la informacion de una imagen para escribirla en la carpeta
+donde se encuentra el programa, el nombre de la imagen corresponde a la variable filename
 */
 void write_bmp(const char* filename, BMPImage* image) {
     FILE* file = fopen(filename, "wb"); //wb = write binary
@@ -135,8 +135,7 @@ BMPImage* saturate_bmp(BMPImage* image, float factor) {
             pixel.r = pixel.r * factor;
             pixel.g = pixel.g * factor;
             pixel.b = pixel.b * factor;
-
-            
+   
             //Asegurar que los pixeles esten dentro del rango valido
             if (pixel.r > 255){
                 pixel.r = (unsigned char) 255;
@@ -154,6 +153,7 @@ BMPImage* saturate_bmp(BMPImage* image, float factor) {
 
     return new_image;
 }
+
 /*
 Entrada: imagen tipo BMPImage (Imagen anteiormente saturada)
 Salida: imagen en escala de grises tipo BMPImage
@@ -170,6 +170,7 @@ BMPImage* grayScale_bmp(BMPImage* image) {
     for (int y = 0; y < image->height; y++) {
         for (int x = 0; x < image->width; x++) {
             RGBPixel pixel = image->data[y * image->width + x];
+            //Aplicar ecuacion de luminiscencia
             unsigned char gray = (unsigned char)(pixel.r * 0.3 + pixel.g * 0.59 + pixel.b * 0.11);
             pixel.r = gray;
             pixel.g = gray;
@@ -220,7 +221,15 @@ BMPImage* binarize_bmp(BMPImage* image,float factor){
 
 }
 
-int nearly_black(BMPImage* image,float factor){
+/*
+Entrada: imagen tipo BMPImage y un umbral (factor) de clasificacion
+Salida: entero, 1 si es una imagen calificada como nearly black, 0 en caso contrario
+Descripcion: se clasifica una imagen usando un umbral (o factor) como referencia, si el pixel tiene
+un valor  mayor a este, se aumenta cont1, es decir, se haya pixel blanco, por el contrario, se asigna 0, indicando
+un pixel negro
+*/
+int nearly_black(BMPImage* image, float factor){
+    //cont 1 para contar pixeles blancos, cont2 para contar pixeles negros
     int cont1 = 0, cont2 = 0;
     int umbral = (int)fabs(255 * factor);
 
@@ -243,5 +252,4 @@ int nearly_black(BMPImage* image,float factor){
     }
 
     return 0; //Imagen no es nearly black
-
 }

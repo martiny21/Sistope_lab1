@@ -1,7 +1,7 @@
-all: main
+all: lab1
 
-main: main.c functions.o
-	gcc -g functions.o main.c -o main
+main: lab1.c functions.o
+	gcc -g functions.o lab1.c -o lab1
 
 functions: functions.c functions.h
 	gcc -g -c functions.c
