@@ -30,10 +30,10 @@ int main(int argc, char *argv[]){
             p = atof(optarg); //-p: factor de saturación del filtro.
             break;
         case 'u':
-            u = atoi(optarg); //-u: UMBRAL para binarizar la imagen.
+            u = atof(optarg); //-u: UMBRAL para binarizar la imagen.
             break;
         case 'v':
-            v = atoi(optarg); //-v: UMBRAL para clasificación.
+            v = atof(optarg); //-v: UMBRAL para clasificación.
             break;
         case 'C':
             C = optarg; //-C: nombre de la carpeta resultante con las imágenes, con los filtros aplicados.
@@ -75,7 +75,7 @@ int main(int argc, char *argv[]){
     //Archivo CSV con 2 columnas
     fprintf(fileCSV, "Nombre Imagen,Clasificacion\n");
 
-    
+    //Variables para realizar concatenacion
     char bmp[20] = ".bmp";
     char *name1;
     name1 = N;
@@ -103,6 +103,7 @@ int main(int argc, char *argv[]){
     
     char* saturated;
     char* grayScale;
+    //char* binarize;
 
     while (loop!=0) 
     {   
@@ -160,6 +161,7 @@ int main(int argc, char *argv[]){
             }
             // *Comentario de desarrollo* fin de la seccion para la funcion
 
+             //Clasificacion de imagen
             if (nearly_black(new_image, v) == 1) {
                 fprintf(fileCSV, "%s,1\n", resultado);
             }
@@ -212,13 +214,14 @@ int main(int argc, char *argv[]){
             // Esta parte es para mover la escala de grises al directorio creado
             // *comentario de desarrollo* esta parte hay que separarla en caso de que se deseen usar menos filtros
             if (rename(grayScale, PathGray) == 0) {
-                printf("El archivo saturated se movió correctamente a %s.\n", PathGray);
+                printf("El archivo grayScale se movió correctamente a %s.\n", PathGray);
             } else {
                 perror("Error al mover el archivo");
                 return 1;
             }
             // *Comentario de desarrollo* fin de la seccion para la funcion
 
+             //Clasificacion de imagen
             if (nearly_black(new_image_GS, v) == 1) {
                 fprintf(fileCSV, "%s,1\n", resultado);
             }
@@ -227,6 +230,7 @@ int main(int argc, char *argv[]){
             }
 
             free(saturated);
+            free(grayScale);
 
             free_bmp(new_image2);
             free_bmp(new_image_GS);
@@ -253,8 +257,10 @@ int main(int argc, char *argv[]){
             grayScale = GrayChars(loop);
 
             // Concatenar variable binarize con loop y bmp
+            //binarize = BinarizeChars(loop);
             snprintf(binarize + strlen(binarize), sizeof(binarize) - strlen(binarize), "%d", loop);
             snprintf(binarize + strlen(binarize), sizeof(binarize) - strlen(binarize),"%s", bmp);
+            
 
             // *Comentario de desarrollo* fin de la seccion para la funcion
 
@@ -280,7 +286,7 @@ int main(int argc, char *argv[]){
             // Esta parte es para mover la escala de grises al directorio creado
             // *comentario de desarrollo* esta parte hay que separarla en caso de que se deseen usar menos filtros
             if (rename(grayScale, PathGray) == 0) {
-                printf("El archivo saturated se movió correctamente a %s.\n", PathGray);
+                printf("El archivo grayScale se movió correctamente a %s.\n", PathGray);
             } else {
                 perror("Error al mover el archivo");
                 return 1;
@@ -295,13 +301,13 @@ int main(int argc, char *argv[]){
 
             // Esta parte es para mover la binarizacion al directorio creado
             if (rename(binarize, PathBinary) == 0) {
-                printf("El archivo saturated se movió correctamente a %s.\n", PathBinary);
+                printf("El archivo binarize se movió correctamente a %s.\n", PathBinary);
             } else {
                 perror("Error al mover el archivo");
                 return 1;
             }
 
-            //fileCSV = fopen(R, "w");
+            //Clasificacion de imagen
             if (nearly_black(new_image_B, v) == 1) {
                 fprintf(fileCSV, "%s,1\n", resultado);
             }
@@ -310,6 +316,7 @@ int main(int argc, char *argv[]){
             }
 
             free(saturated);
+            free(grayScale);
         
             free_bmp(new_image3);
             free_bmp(new_image_GS3);

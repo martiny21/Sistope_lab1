@@ -3,7 +3,8 @@
 /*
 Entrada: Entero a concatenar
 Salida: Cadena de caracteres formateado
-Descripcion:
+Descripcion: Se concatenan cadenas de caracteres para formar el nombre
+de una imagen que se ha saturado
 */
 char * SaturatedChars(int loop){
 
@@ -22,7 +23,8 @@ char * SaturatedChars(int loop){
 /*
 Entrada: Entero a concatenar
 Salida: Cadena de caracteres formateado
-Descripcion:
+Descripcion: Se concatenan cadenas de caracteres para formar el nombre
+de una imagen que se ha convertido a escala de grises
 */
 char* GrayChars(int loop){
     
@@ -34,6 +36,26 @@ char* GrayChars(int loop){
     snprintf(grayScale + strlen(grayScale), sizeof(grayScale)- strlen(grayScale), "%s", bmp);
 
     strcpy(retorno,grayScale);
+    return retorno;
+
+}
+
+/*
+Entrada: Entero a concatenar
+Salida: Cadena de caracteres formateado
+Descripcion: Se concatenan cadenas de caracteres para formar el nombre
+de una imagen que se ha binarizado
+*/
+char* BinarizeChars(int loop){
+    
+    char binarize[100] = "binarize";
+    char bmp[20] = ".bmp";
+    char *retorno = (char*)malloc(strlen(binarize));
+
+    snprintf(binarize + strlen(binarize), sizeof(binarize) - strlen(binarize), "%d", loop);
+    snprintf(binarize + strlen(binarize), sizeof(binarize)- strlen(binarize), "%s", bmp);
+
+    strcpy(retorno,binarize);
     return retorno;
 
 }
